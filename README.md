@@ -166,7 +166,7 @@ Here's the brief documentation:
      ```
 
 6. **Borrow a Book**
-   - **Endpoint:** `/books/borrow/{id}`
+   - **Endpoint:** `/books/{id}/borrow`
    - **Method:** `POST`
    - **Description:** Marks a book as borrowed.
    - **Example Response:**
@@ -178,7 +178,7 @@ Here's the brief documentation:
      ```
 
 7. **Return a Book**
-   - **Endpoint:** `/books/return/{id}`
+   - **Endpoint:** `/books/{id}/return`
    - **Method:** `POST`
    - **Description:** Marks a book as returned.
    - **Example Response:**
