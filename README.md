@@ -71,122 +71,151 @@ Here's the brief documentation:
    npm start
    ```
 
-### 3. API Endpoints with Examples
+API Endpoints
+Authentication
+Signup
 
-**Base URL:** `http://localhost:8000/api`
+Endpoint: POST /api/signup
+Description: Registers a new user.
+Request Body:
+json
+Copy code
+{
+  "name": "John Doe",
+  "email": "johndoe@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
+}
+Response:
+json
+Copy code
+{
+  "status": true,
+  "message": "User registered successfully.",
+  "token": "auth_token_here"
+}
+Login
 
-1. **Get All Books**
-   - **Endpoint:** `/books`
-   - **Method:** `GET`
-   - **Description:** Retrieves a list of all books.
-   - **Example Response:**
-     ```json
-     [
-       {
-         "id": 1,
-         "title": "Book Title",
-         "author": "Author Name",
-         "genre": "Genre",
-         "publication_year": 2020,
-         "is_borrowed": false,
-         "image": "book_image.jpg"
-       }
-     ]
-     ```
+Endpoint: POST /api/login
+Description: Authenticates a user and provides a token.
+Request Body:
+json
+Copy code
+{
+  "email": "johndoe@example.com",
+  "password": "password123"
+}
+Response:
+json
+Copy code
+{
+  "status": true,
+  "message": "Login successful.",
+  "token": "auth_token_here"
+}
+Books Management
+Get All Books
 
-2. **Filter Books**
-   - **Endpoint:** `/books`
-   - **Method:** `GET`
-   - **Parameters:**
-     - `author` (optional)
-     - `genre` (optional)
-     - `publication_year` (optional)
-   - **Description:** Retrieves books filtered by the provided parameters. If no parameters are passed, all books are returned.
-   - **Example Request:** `GET /books?author=Author Name`
-   - **Example Response:**
-     ```json
-     [
-       {
-         "id": 2,
-         "title": "Another Book",
-         "author": "Author Name",
-         "genre": "Genre",
-         "publication_year": 2019,
-         "is_borrowed": false,
-         "image": "another_book_image.jpg"
-       }
-     ]
-     ```
+Endpoint: GET /api/books
+Description: Retrieves a list of all books.
+Response:
+json
+Copy code
+{
+  "status": true,
+  "data": [
+    {
+      "id": 1,
+      "title": "Book Title",
+      "author": "Author Name",
+      "publication_year": 2023,
+      "genre": "Fiction",
+      "is_borrowed": false,
+      "image": "book_image.jpg"
+    }
+  ]
+}
+Get Filtered Books
 
-3. **Add a Book**
-   - **Endpoint:** `/books`
-   - **Method:** `POST`
-   - **Description:** Adds a new book to the collection.
-   - **Request Body:**
-     ```json
-     {
-       "title": "New Book",
-       "author": "New Author",
-       "genre": "New Genre",
-       "publication_year": 2021,
-       "image": "new_book_image.jpg"
-     }
-     ```
-   - **Example Response:**
-     ```json
-     {
-       "status": true,
-       "message": "Book added successfully."
-     }
-     ```
+Endpoint: GET /api/books?author={author}&genre={genre}&publication_year={year}
+Description: Retrieves books based on optional filters.
+Response: Same as "Get All Books".
+Add a New Book
 
-4. **Update a Book**
-   - **Endpoint:** `/books/{id}`
-   - **Method:** `PUT`
-   - **Description:** Updates an existing book.
-   - **Request Body:** Similar to the Add a Book endpoint.
-   - **Example Response:**
-     ```json
-     {
-       "status": true,
-       "message": "Book updated successfully."
-     }
-     ```
+Endpoint: POST /api/books
+Description: Adds a new book to the collection.
+Request Body:
+json
+Copy code
+{
+  "title": "Book Title",
+  "author": "Author Name",
+  "publication_year": 2023,
+  "genre": "Fiction",
+  "image": "book_image.jpg"
+}
+Response:
+json
+Copy code
+{
+  "status": true,
+  "message": "Book added successfully.",
+  "data": {
+    "id": 1,
+    "title": "Book Title",
+    "author": "Author Name",
+    "publication_year": 2023,
+    "genre": "Fiction",
+    "is_borrowed": false,
+    "image": "book_image.jpg"
+  }
+}
+Update a Book
 
-5. **Delete a Book**
-   - **Endpoint:** `/books/{id}`
-   - **Method:** `DELETE`
-   - **Description:** Deletes a book from the collection.
-   - **Example Response:**
-     ```json
-     {
-       "status": true,
-       "message": "Book deleted successfully."
-     }
-     ```
+Endpoint: PUT /api/books/{id}
+Description: Updates details of an existing book.
+Request Body: Same as "Add a New Book".
+Response:
+json
+Copy code
+{
+  "status": true,
+  "message": "Book updated successfully."
+}
+Delete a Book
 
-6. **Borrow a Book**
-   - **Endpoint:** `/books/{id}/borrow`
-   - **Method:** `POST`
-   - **Description:** Marks a book as borrowed.
-   - **Example Response:**
-     ```json
-     {
-       "status": true,
-       "message": "Book borrowed successfully."
-     }
-     ```
+Endpoint: DELETE /api/books/{id}
+Description: Deletes a book from the collection.
+Response:
+json
+Copy code
+{
+  "status": true,
+  "message": "Book deleted successfully."
+}
+Borrowing and Returning Books
+Borrow a Book
 
-7. **Return a Book**
-   - **Endpoint:** `/books/{id}/return`
-   - **Method:** `POST`
-   - **Description:** Marks a book as returned.
-   - **Example Response:**
-     ```json
-     {
-       "status": true,
-       "message": "Book returned successfully."
-     }
-     ```
+Endpoint: POST /api/books/{id}/borrow
+Description: Marks a book as borrowed.
+Response:
+json
+Copy code
+{
+  "status": true,
+  "message": "Book borrowed successfully."
+}
+Return a Book
+
+Endpoint: POST /api/books/{id}/return
+Description: Marks a book as returned.
+Response:
+json
+Copy code
+{
+  "status": true,
+  "message": "Book returned successfully."
+}
+
 
 This documentation should help in understanding the project structure, setting up the environment, and using the API effectively.
