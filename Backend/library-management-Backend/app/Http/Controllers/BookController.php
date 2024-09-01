@@ -206,13 +206,15 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
             'title' => 'sometimes|required|string',  // Validate the title if it's provided
             'author' => 'sometimes|required|string',  // Validate the author if it's provided
             'publication_year' => 'sometimes|required|integer|min:1900|max:' . now()->year,  // Validate the publication year if it's provided
             'genre' => 'sometimes|required|string',  // Validate the genre if it's provided
-            'image' => 'nullable|mimes:png,jpg,jpeg,gif',  // Validate the image file type if it's provided
+            'image' => 'nullable|mimes:png,jpg,jpeg,gif|max:2048',  // Validate the image file type if it's provided
         ]);
 
         // Check if validation failed

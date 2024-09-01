@@ -13,51 +13,92 @@ const UpdateBook = () => {
 
   useEffect(() => {
     const fetchBook = async () => {
-      const response = await fetch(`http://localhost:8000/api/books/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await response.json();
-      if (data.status) {
-        setTitle(data.data.title);
-        setAuthor(data.data.author);
-        setPublicationYear(data.data.publication_year);
-        setGenre(data.data.genre);
-        // No need to set image as it's a file
-      } else {
-        setError(data.message);
+      try {
+        const response = await fetch(`http://localhost:8000/api/books/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
+        }
+
+        const data = await response.json();
+        if (data.status) {
+          setTitle(data.data.title);
+          setAuthor(data.data.author);
+          setPublicationYear(data.data.publication_year);
+          setGenre(data.data.genre);
+        } else {
+          setError(data.message);
+        }
+      } catch (err) {
+        console.error("Failed to fetch book details:", err);
+        setError("Failed to fetch book details.");
       }
     };
+
     fetchBook();
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("author", author);
-    formData.append("publication_year", publicationYear);
-    formData.append("genre", genre);
-    if (image) {
-      formData.append("image", image);
-    }
+    // Prepare book data as JSON
+    const bookData = {
+      title,
+      author,
+      publication_year: publicationYear,
+      genre,
+    };
 
-    const response = await fetch(`http://localhost:8000/api/books/${id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: formData,
-    });
+    try {
+      // Update book data
+      const response = await fetch(`http://localhost:8000/api/books/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(bookData),
+      });
 
-    const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Network response was not ok.");
+      }
 
-    if (data.status) {
-      navigate("/books");
-    } else {
-      setError(data.message);
+      const data = await response.json();
+
+      if (data.status) {
+        // Handle image upload if there is an image
+        if (image) {
+          const imageData = new FormData();
+          imageData.append("image", image);
+
+          const imageResponse = await fetch(
+            `http://localhost:8000/api/books/${id}/upload-image`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: imageData,
+            }
+          );
+
+          if (!imageResponse.ok) {
+            throw new Error("Failed to upload image.");
+          }
+        }
+
+        navigate("/books");
+      } else {
+        setError(data.message);
+      }
+    } catch (err) {
+      console.error("Failed to update book:", err);
+      setError("Failed to update book.");
     }
   };
 
