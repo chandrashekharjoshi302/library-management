@@ -26,7 +26,7 @@ Here's the brief documentation:
 #### Backend (Laravel):
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/chandrashekharjoshi302/library-management.git
    cd backend
    ```
 
